@@ -25,14 +25,4 @@ zip -r ../fc_deploy.zip .
 cd ..
 rm -rf fc_build
 
-echo "Deployment package created: fc_deploy.zip"
-echo "Size: $(du -h fc_deploy.zip | cut -f1)"
-echo ""
-echo "Next steps:"
-echo "1. Log in to Alibaba Cloud Function Compute console"
-echo "2. Create a new function or update existing one"
-echo "3. Upload fc_deploy.zip as the function code"
-echo "4. Set handler to: index.handler"
-echo "5. Configure environment variables:"
-echo "   - DASHSCOPE_API_KEY"
-echo "   - BAILIAN_AGENT_ID"
+echo "Deployment package ready: fc_deploy.zip ($(du -h fc_deploy.zip | cut -f1))"

@@ -34,18 +34,14 @@ cp .env.example .env
 
 ### Deployment to Alibaba Cloud Function Compute
 
-1. Set environment variables:
 ```bash
+# Set credentials
 export DASHSCOPE_API_KEY=your-api-key
 export BAILIAN_AGENT_ID=your-agent-id
-```
 
-2. Build and deploy:
-```bash
+# Deploy
 ./deploy_fc.sh
 ```
-
-See [DEPLOY_FC.md](DEPLOY_FC.md) for detailed deployment instructions.
 
 ## API Usage
 
@@ -75,17 +71,16 @@ Response:
 ## Project Structure
 
 ```
-├── app.py                 # Local FastAPI server (HTTP)
-├── app_dashscope.py      # DashScope integrated version
+├── app_dashscope.py      # FastAPI server with DashScope
 ├── fc_index.py          # Function Compute handler
 ├── requirements.txt      # Python dependencies
 ├── .env.example         # Environment variables template
-├── setup.sh             # Local setup script
-├── start.sh             # Local start script
-├── build_fc.sh          # Build FC deployment package
-├── deploy_fc.sh         # Deployment helper script
+├── build_fc.sh          # Build deployment package
+├── deploy_fc.sh         # Deploy to Function Compute
 ├── fc_template.yml      # Function Compute template
-└── s.yaml               # Serverless Devs config
+├── s.yaml               # Serverless Devs config
+├── setup.sh             # Local development setup
+└── start.sh             # Local development server
 ```
 
 ## Environment Variables

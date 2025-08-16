@@ -3,7 +3,7 @@ name: liaofansixun-app
 access: default
 
 vars:
-  region: cn-shanghai
+  region: cn-hangzhou
   service:
     name: liaofansixun-service
     description: 'Liao Fan Si Xun Proxy Service using DashScope'
@@ -18,7 +18,7 @@ services:
       function:
         name: liaofansixun-proxy
         description: 'Proxy function for Liao Fan Si Xun agent'
-        runtime: python3.9
+        runtime: python3.12
         codeUri: ./fc_deploy.zip
         handler: index.handler
         memorySize: 512
