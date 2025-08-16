@@ -1,0 +1,48 @@
+edition: 1.0.0
+name: liaofansixun-app
+access: default
+
+vars:
+  region: cn-shanghai
+  service:
+    name: liaofansixun-service
+    description: 'Liao Fan Si Xun Proxy Service using DashScope'
+    internetAccess: true
+
+services:
+  liaofansixun:
+    component: fc
+    props:
+      region: ${vars.region}
+      service: ${vars.service}
+      function:
+        name: liaofansixun-proxy
+        description: 'Proxy function for Liao Fan Si Xun agent'
+        runtime: python3.9
+        codeUri: ./fc_deploy.zip
+        handler: index.handler
+        memorySize: 512
+        timeout: 30
+        environmentVariables:
+          DASHSCOPE_API_KEY: ${env.DASHSCOPE_API_KEY}
+          BAILIAN_AGENT_ID: ${env.BAILIAN_AGENT_ID}
+        instanceConcurrency: 100
+      triggers:
+        - name: httpTrigger
+          type: http
+          config:
+            authType: anonymous
+            methods:
+              - GET
+              - POST
+              - OPTIONS
+            disableURLInternet: false
+      customDomains:
+        - domainName: auto
+          protocol: HTTP
+          routeConfigs:
+            - path: /*
+              methods:
+                - GET
+                - POST
+                - OPTIONS

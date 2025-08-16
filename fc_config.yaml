@@ -1,0 +1,24 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  liaofansixun-service:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'Liao Fan Si Xun Proxy Service'
+    liaofansixun-proxy:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: fc_handler.handler
+        Runtime: python3.10
+        CodeUri: ./fc_deploy.zip
+        MemorySize: 512
+        Timeout: 10
+        EnvironmentVariables:
+          BAILIAN_AGENT_ID: ${BAILIAN_AGENT_ID}
+          BAILIAN_API_KEY: ${BAILIAN_API_KEY}
+      Events:
+        http-trigger:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ['POST']

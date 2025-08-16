@@ -1,0 +1,69 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+
+Parameters:
+  DashScopeApiKey:
+    Type: String
+    Description: DashScope API Key
+    NoEcho: true
+  BailianAgentId:
+    Type: String
+    Description: Bailian Agent ID
+
+Resources:
+  # Service definition
+  liaofansixun-service:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'Liao Fan Si Xun Proxy Service using DashScope'
+      InternetAccess: true
+      LogConfig:
+        Project: 'liaofansixun-logs'
+        Logstore: 'liaofansixun-store'
+        EnableRequestMetrics: true
+        EnableInstanceMetrics: true
+    
+    # Function definition
+    liaofansixun-proxy:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        Runtime: python3.9
+        CodeUri: ./fc_deploy.zip
+        Description: 'Liao Fan Si Xun agent proxy using DashScope SDK'
+        MemorySize: 512
+        Timeout: 30
+        EnvironmentVariables:
+          DASHSCOPE_API_KEY:
+            Ref: DashScopeApiKey
+          BAILIAN_AGENT_ID:
+            Ref: BailianAgentId
+        
+      # HTTP Trigger
+      Events:
+        http-trigger:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods:
+              - GET
+              - POST
+            DisableURLInternet: false
+
+  # Custom domain (optional)
+  # liaofansixun-domain:
+  #   Type: 'Aliyun::Serverless::CustomDomain'
+  #   Properties:
+  #     DomainName: api.liaofansixun.example.com
+  #     Protocol: HTTP,HTTPS
+  #     RouteConfig:
+  #       Routes:
+  #         '/*':
+  #           ServiceName: liaofansixun-service
+  #           FunctionName: liaofansixun-proxy
+
+Outputs:
+  FunctionEndpoint:
+    Description: Function HTTP endpoint
+    Value:
+      'Fn::Sub': 'https://${AccountId}.${Region}.fc.aliyuncs.com/2016-08-15/proxy/liaofansixun-service/liaofansixun-proxy/'
